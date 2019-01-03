@@ -33,8 +33,8 @@ public class AutoUpdateService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        updateWeather();
-        updateBingPic();
+        updateWeather();  //更新天气，更新后的数据直接存储到SharedPreferences文件中
+        updateBingPic();  //更新背景图片，更新后的数据直接存储到SharedPreferences文件中
         AlarmManager manager = (AlarmManager) getSystemService(ALARM_SERVICE);
         int anHour = 8 * 60 * 60 * 1000; // 这是8小时的毫秒数
         long triggerAtTime = SystemClock.elapsedRealtime() + anHour;
@@ -56,6 +56,7 @@ public class AutoUpdateService extends Service {
             Weather weather = Utility.handleWeatherResponse(weatherString);
             String weatherId = weather.basic.weatherId;
             String weatherUrl = "http://guolin.tech/api/weather?cityid=" + weatherId + "&key=bc0418b57b2d4918819d3974ac1285d9";
+
             HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
