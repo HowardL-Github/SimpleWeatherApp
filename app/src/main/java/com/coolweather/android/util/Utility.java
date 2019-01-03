@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Utility {
+public class Utility {  //提供一个工具类解析和处理服务器返回的JSON格式的省市县数据
 
     /**
      * 解析和处理服务器返回的省级数据
@@ -22,11 +22,11 @@ public class Utility {
             try {
                 JSONArray allProvinces = new JSONArray(response);
                 for (int i = 0; i < allProvinces.length(); i++) {
-                    JSONObject provinceObject = allProvinces.getJSONObject(i);
+                    JSONObject provinceObject = allProvinces.getJSONObject(i);  //JSONArray和JSONObject解析数据
                     Province province = new Province();
                     province.setProvinceName(provinceObject.getString("name"));
-                    province.setProvinceCode(provinceObject.getInt("id"));
-                    province.save();
+                    province.setProvinceCode(provinceObject.getInt("id"));  //组装成实体类对象
+                    province.save();  //存储到数据库
                 }
                 return true;
             } catch (JSONException e) {
@@ -85,11 +85,13 @@ public class Utility {
     /**
      * 将返回的JSON数据解析成Weather实体类
      */
-    public static Weather handleWeatherResponse(String response) {
+    public static Weather handleWeatherResponse(String response) {  //解析天气JSON数据
         try {
+            //通过JSONObject和JSONArray解析天气数据主体内容
             JSONObject jsonObject = new JSONObject(response);
             JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
             String weatherContent = jsonArray.getJSONObject(0).toString();
+            //调用fromJson()方法直接将JSON数据转换成Weather对象（已定义过相应的GSON实体类）
             return new Gson().fromJson(weatherContent, Weather.class);
         } catch (Exception e) {
             e.printStackTrace();
